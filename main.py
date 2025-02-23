@@ -4,7 +4,7 @@ from langchain.text_splitter import CharacterTextSplitter
 from langchain_community.embeddings import  OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
-from langchain.evaluation import QAEvalChain
+from langchain.evaluation.qa import QAEvalChain
 
 
 def generate_response(
@@ -45,7 +45,7 @@ def generate_response(
         llm=OpenAI(openai_api_key=openai_api_key),
         chain_type="stuff",
         retriever=retriever,
-        input_keys="question"
+        input_key="question"
     )
 
 
@@ -59,8 +59,8 @@ def generate_response(
     graded_outputs = eval_chain.evaluate(
         real_qa,
         predictions,
-        quwstion_key="question",
-        predictions_key="answer",
+        question_key="question",
+        predictions_key="result",
         answer_key="answer"
     )
 
@@ -91,7 +91,8 @@ uploaded_file = st.file_uploader(
     "Upload a .txt document",
     type="txt"
 )
-query_text =st.text_input(
+
+query_text = st.text_input(
     "Enter a question you have already fact-checked:",
     placeholder="Write your question here",
     disabled=not uploaded_file
@@ -107,7 +108,7 @@ result = []
 
 with st.form( "myform", clear_on_submit=True):
     openai_api_key = st.text_input(
-        "OpenAI API Key",
+        "OpenAI API Key:",
         type="password",
         disabled=not (uploaded_file and query_text)
     )
@@ -120,7 +121,7 @@ with st.form( "myform", clear_on_submit=True):
     if submitted and openai_api_key.startswith("sk-"):
         with st.spinner("Wait, please. I am working on it..."):
             response = generate_response(
-                uploaded_file, 
+                uploaded_file,
                 openai_api_key,
                 query_text,
                 response_text
@@ -131,7 +132,7 @@ with st.form( "myform", clear_on_submit=True):
 if len(result):
     st.write("Question")
     st.info(response["predictions"][0]["question"])
-    st.write("Real Answer")
+    st.write("Real answer")
     st.info(response["predictions"][0]["answer"])
     st.write("Answer provided by the AI App")
     st.info(response["predictions"][0]["result"])
