@@ -89,7 +89,7 @@ with st.expander("Evaluate the quality of a RAG APP"):
 
 uploaded_file = st.file_uploader(
     "Upload a .txt document",
-    typw="txt"
+    type="txt"
 )
 query_text =st.text_input(
     "Enter a question you have already fact-checked:",
