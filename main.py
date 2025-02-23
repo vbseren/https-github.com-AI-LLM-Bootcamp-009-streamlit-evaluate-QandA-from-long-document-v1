@@ -8,10 +8,10 @@ from langchain.evaluation.qa import QAEvalChain
 
 
 def generate_response(
-  uploaded_file,
-  openai_api_key,
-  query_text,
-  response_text      
+    uploaded_file,
+    openai_api_key,
+    query_text,
+    response_text
 ):
     # format uploaded file
     documents = [uploaded_file.read().decode()]
@@ -60,7 +60,7 @@ def generate_response(
         real_qa,
         predictions,
         question_key="question",
-        predictions_key="result",
+        prediction_key="result",
         answer_key="answer"
     )
 
